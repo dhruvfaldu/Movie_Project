@@ -61,9 +61,7 @@ const Navbar = () => {
           <option value="8">8+ Ratings</option>
         </select>
 
-
-
-        <div className="relative">
+        <div className="relative flex gap-2">
           <div className="absolute top-1/4 px-2 text-xl">
             <IoSearch />
           </div>
@@ -74,6 +72,17 @@ const Navbar = () => {
             onChange={handleSearch}
             className="px-10 py-2 rounded bg-gray-800 text-white"
           />
+          {/* dark/light mode */}
+          <button className="bg-gray-800 rounded px-6 py-2">
+            <span
+              onClick={() =>
+                setTheme(theme === "dark" ? "light" : "dark")
+              }
+            >
+              {theme === "dark" ? "Light" : "Dark"}
+            </span>
+            
+          </button>
         </div>
       </div>
     </div>
