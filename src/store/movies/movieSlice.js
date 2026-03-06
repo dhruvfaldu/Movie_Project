@@ -50,8 +50,7 @@ const movieSlice = createSlice({
         TrendMovie: [],
         movies: [],
         genres: [],
-        selectedGenre: "",
-        page: 1,
+        selectedGenre: Number(localStorage.getItem("genre")) || "",
         totalPages: 1,
         loading: false,
         error: null,
@@ -71,6 +70,7 @@ const movieSlice = createSlice({
         setGenre: (state, action) => {
             state.selectedGenre = action.payload;
             state.page = 1;
+            localStorage.setItem("genre", action.payload);
         },
 
         addFavorite: (state, action) => {

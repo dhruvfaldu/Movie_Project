@@ -40,49 +40,52 @@ const Navbar = () => {
   }, [theme]);
 
   return (
-    <div className="bg-gray-900 rounded-xl p-4 flex justify-between sticky top-2 z-1">
-      <div className="text-white items-center flex text-2xl font-bold">
-        <BiSolidCameraMovie />
-        <Link to="/"><span className="ml-2">MovieApp</span></Link>
-      </div>
+    <div className="bg-gray-900 rounded-xl p-4 sticky top-2 z-10">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex items-center text-white text-xl md:text-2xl font-bold">
+          <BiSolidCameraMovie />
+          <Link to="/">
+            <span className="ml-2">MovieApp</span>
+          </Link>
+        </div>
 
-      <div className="flex justify-between items-center gap-3">
-        <Link to="/favorites">❤️<sup className="text-xs">{favoriteCount}</sup></Link>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
 
-        <select
-          value={rating}
-          onChange={(e) => dispatch(setRating(Number(e.target.value)))}
-          className="bg-gray-800 px-3 py-2 rounded"
-        >
-          <option value="0">All Ratings ⭐</option>
-          <option value="5">5+ Ratings</option>
-          <option value="6">6+ Ratings</option>
-          <option value="7">7+ Ratings</option>
-          <option value="8">8+ Ratings</option>
-        </select>
+          <Link
+            to="/favorites"
+            className="text-white text-lg flex items-center"
+          >
+            ❤️
+            <sup className="text-xs ml-1">{favoriteCount}</sup>
+          </Link>
 
-        <div className="relative flex gap-2">
-          <div className="absolute top-1/4 px-2 text-xl">
-            <IoSearch />
+          <select
+            value={rating}
+            onChange={(e) =>
+              dispatch(setRating(Number(e.target.value)))
+            }
+            className="bg-gray-800 text-white px-3 py-2 rounded w-full sm:w-auto"
+          >
+            <option value="0">All Ratings ⭐</option>
+            <option value="5">5+ Ratings</option>
+            <option value="6">6+ Ratings</option>
+            <option value="7">7+ Ratings</option>
+            <option value="8">8+ Ratings</option>
+          </select>
+
+          <div className="relative w-full sm:w-64">
+            <div className="absolute left-2 top-2 text-gray-400 text-lg">
+              <IoSearch />
+            </div>
+
+            <input
+              type="text"
+              placeholder="Search movies..."
+              value={query}
+              onChange={handleSearch}
+              className="w-full pl-8 pr-3 py-2 rounded bg-gray-800 text-white"
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Search movies..."
-            value={query}
-            onChange={handleSearch}
-            className="px-10 py-2 rounded bg-gray-800 text-white"
-          />
-          {/* dark/light mode */}
-          <button className="bg-gray-800 rounded px-6 py-2">
-            <span
-              onClick={() =>
-                setTheme(theme === "dark" ? "light" : "dark")
-              }
-            >
-              {theme === "dark" ? "Light" : "Dark"}
-            </span>
-            
-          </button>
         </div>
       </div>
     </div>
