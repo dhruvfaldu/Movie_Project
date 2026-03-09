@@ -1,3 +1,5 @@
+import * as Select from "@radix-ui/react-select";
+import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { searchMovie, setRating } from "../store/movies/movieSlice";
 import { useState, useEffect } from "react";
@@ -53,25 +55,48 @@ const Navbar = () => {
 
           <Link
             to="/favorites"
-            className="text-white text-lg flex items-center"
+            className="text-white text-lg"
           >
-            ❤️
-            <sup className="text-xs ml-1">{favoriteCount}</sup>
+            <span className="mr-2">❤️
+              <sup className="text-xs">{favoriteCount}</sup>
+            </span>
           </Link>
 
-          <select
-            value={rating}
-            onChange={(e) =>
-              dispatch(setRating(Number(e.target.value)))
-            }
-            className="bg-gray-800 text-white px-3 py-2 rounded w-full sm:w-auto"
-          >
-            <option value="0">All Ratings ⭐</option>
-            <option value="5">5+ Ratings</option>
-            <option value="6">6+ Ratings</option>
-            <option value="7">7+ Ratings</option>
-            <option value="8">8+ Ratings</option>
-          </select>
+          <Select.Root
+            value={String(rating)}
+            onValueChange={(value) => dispatch(setRating(Number(value)))}>
+            <Select.Trigger
+              className="bg-gray-800 text-white px-3 py-2 rounded flex items-center justify-between sm:w-40">
+              <Select.Value placeholder="Select Rating" />
+              <Select.Icon>
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content
+                position="popper"
+                sideOffset={5}
+                className="bg-gray-800 text-white rounded shadow-lg sm:w-40 z-50">
+                <Select.Viewport className="p-2">
+                  <Select.Item value="0" className="px-3 py-2 hover:bg-gray-700 rounded cursor-pointer">
+                    <Select.ItemText>All Ratings ⭐</Select.ItemText>
+                  </Select.Item>
+                  <Select.Item value="5" className="px-3 py-2 hover:bg-gray-700 rounded cursor-pointer">
+                    <Select.ItemText>5+ Ratings</Select.ItemText>
+                  </Select.Item>
+                  <Select.Item value="6" className="px-3 py-2 hover:bg-gray-700 rounded cursor-pointer">
+                    <Select.ItemText>6+ Ratings</Select.ItemText>
+                  </Select.Item>
+                  <Select.Item value="7" className="px-3 py-2 hover:bg-gray-700 rounded cursor-pointer">
+                    <Select.ItemText>7+ Ratings</Select.ItemText>
+                  </Select.Item>
+                  <Select.Item value="8" className="px-3 py-2 hover:bg-gray-700 rounded cursor-pointer">
+                    <Select.ItemText>8+ Ratings</Select.ItemText>
+                  </Select.Item>
+                </Select.Viewport>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
 
           <div className="relative w-full sm:w-64">
             <div className="absolute left-2 top-2 text-gray-400 text-lg">

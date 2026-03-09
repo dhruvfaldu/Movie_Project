@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchPopularMovies } from "../../services/api";
 import { searchMovies, fetchMoviesByGenre, fetchGenres } from "../../services/api";
+import {toast} from "react-toastify";
 
 export const searchMovie = createAsyncThunk(
     "movies/getSearchResults",
@@ -26,15 +27,6 @@ export const getMoviesByGenre = createAsyncThunk(
         return data;
     }
 );
-
-export const getTrendingMovies = createAsyncThunk(
-    "movies/getTrendingMovies",
-    async (page) => {
-        const data = await fetchTrendingMovies(page);
-        // console.log(data);
-        return data;
-    }
-)
 
 export const getPopularMovies = createAsyncThunk(
     "movies/getPopularMovies",
@@ -100,20 +92,6 @@ const movieSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder
-            .addCase(getTrendingMovies.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(getTrendingMovies.fulfilled, (state, action) => {
-                state.loading = false;
-                state.TrendMovie = action.payload.results;
-                state.totalPages = action.payload.total_pages;
-            })
-            .addCase(getTrendingMovies.rejected, (state) => {
-                state.loading = false;
-                state.error = "Failed to fetch movies";
-            });
-
         builder
             .addCase(getPopularMovies.pending, (state) => {
                 state.loading = true;
