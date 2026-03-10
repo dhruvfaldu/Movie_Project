@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchPopularMovies } from "../../services/api";
-import { searchMovies, fetchMoviesByGenre, fetchGenres } from "../../services/api";
-import {toast} from "react-toastify";
+import {
+    fetchPopularMovies,
+    searchMovies,
+    fetchMoviesByGenre,
+    fetchGenres,
+} from "../../services/api";
 
 export const searchMovie = createAsyncThunk(
     "movies/getSearchResults",
-    async (query) => {
-        const data = await searchMovies(query);
+    async ({ query, page }) => {
+        const data = await searchMovies(query, page);
         return data;
     }
 );
@@ -15,10 +18,9 @@ export const getGenres = createAsyncThunk(
     "movies/getGenres",
     async () => {
         const data = await fetchGenres();
-        console.log(data);
         return data;
     }
-)
+);
 
 export const getMoviesByGenre = createAsyncThunk(
     "movies/getMoviesByGenre",
@@ -38,9 +40,12 @@ export const getPopularMovies = createAsyncThunk(
 
 const movieSlice = createSlice({
     name: "movies",
+
     initialState: {
         TrendMovie: [],
         movies: [],
+        page: 1,
+        query: "",
         genres: [],
         selectedGenre: Number(localStorage.getItem("genre")) || "",
         totalPages: 1,
@@ -49,6 +54,7 @@ const movieSlice = createSlice({
         favorites: JSON.parse(localStorage.getItem("favorites")) || [],
         rating: 0,
     },
+
     reducers: {
         setPage: (state, action) => {
             state.page = action.payload;
@@ -63,6 +69,11 @@ const movieSlice = createSlice({
             state.selectedGenre = action.payload;
             state.page = 1;
             localStorage.setItem("genre", action.payload);
+        },
+
+        setQuery: (state, action) => {
+            state.query = action.payload;
+            state.page = 1;
         },
 
         addFavorite: (state, action) => {
@@ -91,7 +102,9 @@ const movieSlice = createSlice({
             );
         },
     },
+
     extraReducers: (builder) => {
+
         builder
             .addCase(getPopularMovies.pending, (state) => {
                 state.loading = true;
@@ -112,7 +125,8 @@ const movieSlice = createSlice({
             })
             .addCase(searchMovie.fulfilled, (state, action) => {
                 state.loading = false;
-                state.movies = action.payload;
+                state.movies = action.payload.results;
+                state.totalPages = action.payload.total_pages;
             })
             .addCase(searchMovie.rejected, (state) => {
                 state.loading = false;
@@ -122,24 +136,32 @@ const movieSlice = createSlice({
         builder
             .addCase(getGenres.fulfilled, (state, action) => {
                 state.genres = [{ id: "", name: "All" }, ...action.payload];
-            })
+            });
 
+        builder
             .addCase(getMoviesByGenre.pending, (state) => {
                 state.loading = true;
             })
-
             .addCase(getMoviesByGenre.fulfilled, (state, action) => {
                 state.loading = false;
                 state.movies = action.payload.results;
                 state.totalPages = action.payload.total_pages;
             })
-
             .addCase(getMoviesByGenre.rejected, (state) => {
                 state.loading = false;
                 state.error = "Failed to fetch movies";
-            })
+            });
+
     },
 });
 
-export const { setPage, setRating, setGenre, addFavorite, removeFavorite } = movieSlice.actions;
+export const {
+    setPage,
+    setRating,
+    setGenre,
+    setQuery,
+    addFavorite,
+    removeFavorite,
+} = movieSlice.actions;
+
 export default movieSlice.reducer;

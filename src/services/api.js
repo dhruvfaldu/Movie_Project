@@ -1,4 +1,5 @@
 import axios from "axios";
+import { data } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_TMDB_KEY;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -16,6 +17,7 @@ export const fetchPopularMovies = async (page = 1) => {
   const res = await api.get(
     `/movie/popular?api_key=${API_KEY}&page=${page}`
   );
+  console.log(res);
   return res.data;
 };
 
@@ -29,11 +31,12 @@ export const fetchMovieVideos = async (id) => {
   return res.data.results;
 };
 
-export const searchMovies = async (query) => {
+export const searchMovies = async (query, page = 1) => {
   const res = await api.get(
-    `/search/movie?api_key=${API_KEY}&query=${query}`
+    `/search/movie?api_key=${API_KEY}&query=${query}&page=${page}`
   );
-  return res.data.results;
+  console.log(res);
+  return res.data;
 };
 
 export const fetchGenres = async () => {
@@ -45,7 +48,6 @@ export const fetchMoviesByGenre = async (genreId, page = 1) => {
   const res = await api.get(
     `/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&page=${page}`
   );
-
   return res.data;
 };
 

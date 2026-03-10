@@ -1,23 +1,28 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPopularMovies,setPage, getGenres, getMoviesByGenre, setGenre } from "../store/movies/movieSlice";
+import { getPopularMovies, setPage, getGenres, getMoviesByGenre, setGenre, searchMovie } from "../store/movies/movieSlice";
 import MovieCard from "../components/MovieCard";
 import HeroBanner from "../components/HeroBanner";
 
 const Home = () => {
     const dispatch = useDispatch();
 
-    const { movies, page, totalPages, loading, rating, genres, selectedGenre } = useSelector(
+    const { movies, page, totalPages, loading, rating, genres, selectedGenre, query, } = useSelector(
         (state) => state.movies
     );
-
+    
     useEffect(() => {
-        if (selectedGenre) {
+        if (query && query.length > 2) {
+            dispatch(searchMovie({ query, page }));
+        }
+        else if (selectedGenre) {
             dispatch(getMoviesByGenre({ genreId: selectedGenre, page }));
-        } else {
+        }
+        else {
             dispatch(getPopularMovies(page));
         }
-    }, [dispatch, page, selectedGenre]);
+
+    }, [dispatch, page, selectedGenre, query]);
 
     useEffect(() => {
         dispatch(getGenres());
@@ -69,7 +74,7 @@ const Home = () => {
                     <button
                         key={genre.id}
                         onClick={() => dispatch(setGenre(genre.id))}
-                        className={`px-4 py-2 rounded-full text-sm transition
+                        className={`px-4 py-2 rounded-full text-sm transition cursor-pointer 
 ${selectedGenre === genre.id
                                 ? "bg-red-600 text-white"
                                 : "bg-gray-800 text-gray-300 hover:bg-gray-700"
@@ -80,7 +85,6 @@ ${selectedGenre === genre.id
                 ))}
             </div>
 
-            
             <h2 className="text-2xl font-bold mb-5 mt-5">
                 Popular Movies
             </h2>
@@ -103,42 +107,44 @@ ${selectedGenre === genre.id
                         ))}
                     </div>
 
-                    <div className="flex gap-2 justify-center mt-6 items-center">
-                        <button
-                            onClick={() => dispatch(setPage(page - 1))}
-                            disabled={page === 1}
-                            className="px-3 py-1 bg-gray-800 rounded disabled:opacity-40"
-                        >
-                            Prev
-                        </button>
+                    {filteredMovies.length > 0 && (
+                        <div className="flex gap-2 justify-center mt-6 items-center">
+                            <button
+                                onClick={() => dispatch(setPage(page - 1))}
+                                disabled={page === 1}
+                                className="px-3 py-1 bg-gray-800 rounded disabled:opacity-40 cursor-pointer"
+                            >
+                                Prev
+                            </button>
 
-                        {getPagination().map((num, index) =>
-                            num === "..." ? (
-                                <span key={`dots-${index}`} className="px-2">
-                                    ...
-                                </span>
-                            ) : (
-                                <button
-                                    key={`page-${num}`}
-                                    onClick={() => dispatch(setPage(num))}
-                                    className={`px-3 py-1 rounded ${page === num
-                                        ? "bg-red-600"
-                                        : "bg-gray-800 hover:bg-gray-700"
-                                        }`}
-                                >
-                                    {num}
-                                </button>
-                            )
-                        )}
+                            {getPagination().map((num, index) =>
+                                num === "..." ? (
+                                    <span key={`dots-${index}`} className="px-2">
+                                        ...
+                                    </span>
+                                ) : (
+                                    <button
+                                        key={`page-${num}`}
+                                        onClick={() => dispatch(setPage(num))}
+                                        className={`px-3 py-1 rounded cursor-pointer ${page === num
+                                            ? "bg-red-600"
+                                            : "bg-gray-800 hover:bg-gray-700"
+                                            }`}
+                                    >
+                                        {num}
+                                    </button>
+                                )
+                            )}
 
-                        <button
-                            onClick={() => dispatch(setPage(page + 1))}
-                            disabled={page === totalPages}
-                            className="px-3 py-1 bg-gray-800 rounded disabled:opacity-40"
-                        >
-                            Next
-                        </button>
-                    </div>
+                            <button
+                                onClick={() => dispatch(setPage(page + 1))}
+                                disabled={page === totalPages}
+                                className="px-3 py-1 bg-gray-800 rounded disabled:opacity-40 cursor-pointer"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
                 </>
             )}
         </>

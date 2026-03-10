@@ -9,7 +9,7 @@ const Favorites = () => {
 
     return (
         <div className="bg-gray-950 min-h-screen text-white py-4 px-0">
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto ">
                 <div className="flex items-center justify-between gap-5 mb-5">
                     <h1 className="text-2xl font-bold mt-2 mb-2">
                         My Favorites
@@ -22,7 +22,7 @@ const Favorites = () => {
                 </div>
 
                 {favorites.length === 0 ? (
-                    <p>No favorite movies yet.</p>
+                    <p className="flex justify-center items-center h-100 align-center">No favorite movies yet.</p>
                 ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         {favorites.map((movie) => (
