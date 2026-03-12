@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPopularMovies, setPage, getGenres, getMoviesByGenre, setGenre, searchMovie } from "../store/movies/movieSlice";
+import { getTrendingMovies, getPopularMovies, setPage, getGenres, getMoviesByGenre, setGenre, searchMovie } from "../store/movies/movieSlice";
 import MovieCard from "../components/MovieCard";
 import HeroBanner from "../components/HeroBanner";
+import TrendingCarousel from "../components/TrendingCarousel";
+
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -10,7 +12,9 @@ const Home = () => {
     const { movies, page, totalPages, loading, rating, genres, selectedGenre, query, } = useSelector(
         (state) => state.movies
     );
-    
+
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+
     useEffect(() => {
         if (query && query.length > 2) {
             dispatch(searchMovie({ query, page }));
@@ -27,6 +31,10 @@ const Home = () => {
     useEffect(() => {
         dispatch(getGenres());
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(getTrendingMovies());
+    }, []);
 
     let filteredMovies = [...movies];
     if (rating) {
@@ -65,7 +73,24 @@ const Home = () => {
 
     return (
         <>
-            <div className="flex items-center mt-5  ">
+            <div className="flex justify-end items-center">
+                <div className="flex flex-col items-end bg-gray-800/90 px-3 py-2 rounded-2xl mt-3 w-fit">
+                    <div className="flex flex-row gap-1">
+                        <p className="mt-0.5">Welcome</p>
+                        <div className="bg-red-500 w-7 h-7 flex items-center justify-center rounded-full text-sm">
+                            {user?.name?.charAt(0)}
+                        </div>
+                        <h2 className="text-white mt-0.5">
+                            {user?.name}
+                        </h2>
+                    </div>
+                    <p className="text-gray-400">
+                        {user?.email}
+                    </p>
+                </div>
+            </div>
+
+            <div className="flex items-center mt-5">
                 <HeroBanner movies={movies} />
             </div>
 
@@ -76,13 +101,18 @@ const Home = () => {
                         onClick={() => dispatch(setGenre(genre.id))}
                         className={`px-4 py-2 rounded-full text-sm transition cursor-pointer 
 ${selectedGenre === genre.id
-                                ? "bg-red-600 text-white"
+                                ? "bg-red-500 text-white"
                                 : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                             }`}
                     >
                         {genre.name}
                     </button>
                 ))}
+            </div>
+
+            <h2 className="text-2xl font-bold mt-5">Trending Movies</h2>
+            <div className="flex items-center mt-5">
+                <TrendingCarousel movies={movies} />
             </div>
 
             <h2 className="text-2xl font-bold mb-5 mt-5">

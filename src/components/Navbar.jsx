@@ -2,13 +2,21 @@ import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setRating, setQuery } from "../store/movies/movieSlice";
-import { useState, useEffect } from "react";
+import { useState, useEffect, } from "react";
+import { useNavigate } from "react-router-dom";
 import { BiSolidCameraMovie } from "react-icons/bi";
 import { IoSearch } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import useDebounce from "../hook/useDebounce";
+import { logoutUser } from "../store/movies/authSlice";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
+
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -20,6 +28,10 @@ const Navbar = () => {
 
   const favoriteCount = favorites.length;
 
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    toast.info(`${user.name} Logged out successfully`); 
+  };
   const handleSearch = (e) => {
     setLocalQuery(e.target.value);
   };
@@ -29,7 +41,7 @@ const Navbar = () => {
   }, [debouncedQuery, dispatch]);
 
   return (
-    <div className="bg-gray-900 rounded-xl p-4 sticky top-2 z-10">
+    <div className="bg-gray-900 rounded-xl p-4 top-2 z-10">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center text-white text-xl md:text-2xl font-bold">
           <span className="bg-red-500 px-2 py-2 rounded-full"><BiSolidCameraMovie /></span>
@@ -40,7 +52,7 @@ const Navbar = () => {
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
           <Link to="/favorites" className="text-white text-lg">
-            <button className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-200 shadow-md">
+            <button className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-200 shadow-md cursor-pointer leading-6">
               <span className="font-medium">Favorites</span>
               <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded-full">
                 {favoriteCount}
@@ -92,9 +104,17 @@ const Navbar = () => {
               placeholder="Search movies..."
               value={query}
               onChange={handleSearch}
-              className="w-full pl-8 pr-3 py-2 rounded bg-gray-800 text-white"
-            />
+              className="w-full pl-8 pr-3 py-2 rounded-lg bg-gray-800 text-white" />
           </div>
+
+          <div className="">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-200 shadow-md cursor-pointer leading-6">
+              <span className="font-medium">Logout</span>
+            </button>
+          </div>
+
         </div>
       </div>
     </div>

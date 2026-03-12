@@ -4,6 +4,7 @@ import {
     searchMovies,
     fetchMoviesByGenre,
     fetchGenres,
+    fetchTrendingMovies,
 } from "../../services/api";
 
 export const searchMovie = createAsyncThunk(
@@ -30,6 +31,14 @@ export const getMoviesByGenre = createAsyncThunk(
     }
 );
 
+export const getTrendingMovies = createAsyncThunk(
+    "movies/getTrendingMovies",
+    async () => {
+        const data = await fetchTrendingMovies();
+        return data;
+    }
+);
+
 export const getPopularMovies = createAsyncThunk(
     "movies/getPopularMovies",
     async (page) => {
@@ -42,7 +51,7 @@ const movieSlice = createSlice({
     name: "movies",
 
     initialState: {
-        TrendMovie: [],
+        trending: [],
         movies: [],
         page: 1,
         query: "",
@@ -104,6 +113,14 @@ const movieSlice = createSlice({
     },
 
     extraReducers: (builder) => {
+
+        builder
+            .addCase(getTrendingMovies.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getTrendingMovies.fulfilled, (state, action) => {
+                state.trending = action.payload.results;
+            });
 
         builder
             .addCase(getPopularMovies.pending, (state) => {
