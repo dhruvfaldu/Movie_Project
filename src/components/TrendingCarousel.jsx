@@ -9,19 +9,33 @@ const TrendingCarousel = () => {
 
   return (
     <Swiper
-      slidesPerView={5}
       spaceBetween={20}
       autoplay={{
         delay: 2000,
         disableOnInteraction: false,
       }}
       modules={[Autoplay]}
+
+      breakpoints={{
+        320: {
+          slidesPerView: 2,
+        },
+        640: {
+          slidesPerView: 3,
+        },
+        768: {
+          slidesPerView: 4,
+        },
+        1024: {
+          slidesPerView: 5,
+        },
+      }}
     >
       {trending.map((movie) => (
         <SwiperSlide key={movie.id}>
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            className="rounded-lg"
+            className="rounded-lg w-full"
           />
         </SwiperSlide>
       ))}
