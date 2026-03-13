@@ -115,7 +115,7 @@ const Navbar = () => {
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
-              <div className="w-10 h-10 flex items-center justify-center bg-red-600 text-white font-bold rounded-full cursor-pointer hover:scale-110 transition">
+              <div className="w-8 h-8 flex items-center justify-center bg-red-600 text-white font-bold rounded-full cursor-pointer">
                 {firstLetter}
               </div>
             </DropdownMenu.Trigger>
@@ -136,7 +136,7 @@ const Navbar = () => {
                 <DropdownMenu.Separator className="h-px bg-gray-700 my-2" />
                 <DropdownMenu.Item
                   onClick={handleLogout}
-                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-center cursor-pointer"
+                  className="bg-red-500 hover:bg-red-700 text-white px-3 py-2 rounded text-center cursor-pointer"
                 >
                   Logout
                 </DropdownMenu.Item>
