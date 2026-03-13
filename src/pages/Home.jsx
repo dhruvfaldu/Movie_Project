@@ -9,7 +9,6 @@ const Home = () => {
     const dispatch = useDispatch();
 
     const { movies, page, totalPages, loading, rating, genres, selectedGenre, query, } = useSelector((state) => state.movies);
-    
     useEffect(() => {
         if (query && query.length > 2) {
             dispatch(searchMovie({ query, page }));
@@ -47,8 +46,8 @@ const Home = () => {
         const pages = [];
         pages.push(1);
 
-        const start = Math.max(2, page - 2);
-        const end = Math.min(totalPages - 1, page + 2);
+        const start = Math.max(2, page - 1);
+        const end = Math.min(totalPages - 1, page + 1);
 
         if (start > 2) {
             pages.push("...");
@@ -121,7 +120,7 @@ const Home = () => {
             </h2>
             {loading ? (
                 <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                    {[...Array(10)].map((_, i) => (
+                    {[...Array(15)].map((_, i) => (
                         <div key={i} className="animate-pulse">
                             <div className="bg-gray-600 h-75 rounded-lg mb-2"></div>
                             <div className="bg-gray-600 h-4 w-3/4 rounded mb-2"></div>

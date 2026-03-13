@@ -130,7 +130,7 @@ const movieSlice = createSlice({
             })
             .addCase(getPopularMovies.fulfilled, (state, action) => {
                 state.loading = false;
-                state.movies = action.payload.results.slice(0, 10);
+                state.movies = action.payload.results.slice(0, 15);
                 state.totalPages = action.payload.total_pages;
             })
             .addCase(getPopularMovies.rejected, (state) => {
