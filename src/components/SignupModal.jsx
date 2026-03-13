@@ -90,7 +90,7 @@ function SignupModal({ openLogin }) {
             <button
               type="button"
               onClick={() => setShowPassword({password: !showPassword.password})}
-              className="absolute right-3 top-4 text-gray-400"
+              className="absolute right-3 top-4 text-gray-400 cursor-pointer"
             >
               {showPassword.password ? <FiEyeOff /> : <FiEye />}
             </button>

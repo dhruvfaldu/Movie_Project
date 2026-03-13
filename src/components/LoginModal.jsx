@@ -83,7 +83,7 @@ function LoginModal({ openSignup }) {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-4 text-gray-400"
+                className="absolute right-3 top-4 text-gray-400 cursor-pointer"
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
