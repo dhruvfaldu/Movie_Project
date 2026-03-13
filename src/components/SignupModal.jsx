@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import login from "../assets/login.jpg";
 
 function SignupModal({ openLogin }) {
 
@@ -44,7 +45,8 @@ function SignupModal({ openLogin }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div className="min-h-screen bg-cover bg-center" style={{backgroundImage:`url(${login})`}}>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-80 shadow-lg">
         <h2 className="text-white text-xl mb-5 text-center">Signup</h2>
         <label className="text-gray-300 text-sm">Name</label>
@@ -110,7 +112,7 @@ function SignupModal({ openLogin }) {
         </p>
 
       </form>
-
+    </div>
     </div>
   );
 }

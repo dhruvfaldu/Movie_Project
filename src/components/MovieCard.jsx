@@ -10,9 +10,7 @@ const MovieCard = ({ id, poster, title, rating }) => {
   const dispatch = useDispatch();
   const { favorites } = useSelector((state) => state.movies);
 
-  const isFavorite = favorites.some(
-    (fav) => fav.id === id
-  );
+  const isFavorite = favorites.some((fav) => fav.id === id);
 
   return (
     <div className="bg-gray-900 rounded-xl overflow-hidden shadow-lg hover:scale-105 hover:shadow-xl transition duration-300">

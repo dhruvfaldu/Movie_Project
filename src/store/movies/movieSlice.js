@@ -49,7 +49,6 @@ export const getPopularMovies = createAsyncThunk(
 
 const movieSlice = createSlice({
     name: "movies",
-
     initialState: {
         trending: [],
         movies: [],
@@ -63,7 +62,6 @@ const movieSlice = createSlice({
         favorites: JSON.parse(localStorage.getItem("favorites")) || [],
         rating: 0,
     },
-
     reducers: {
         setPage: (state, action) => {
             state.page = action.payload;
@@ -113,13 +111,17 @@ const movieSlice = createSlice({
     },
 
     extraReducers: (builder) => {
-
         builder
             .addCase(getTrendingMovies.pending, (state) => {
                 state.loading = true;
             })
             .addCase(getTrendingMovies.fulfilled, (state, action) => {
+                state.loading = false;
                 state.trending = action.payload.results;
+            })
+            .addCase(getTrendingMovies.rejected, (state) => {
+                state.loading = false;
+                state.error = "Failed to fetch movies";
             });
 
         builder
@@ -128,7 +130,7 @@ const movieSlice = createSlice({
             })
             .addCase(getPopularMovies.fulfilled, (state, action) => {
                 state.loading = false;
-                state.movies = action.payload.results;
+                state.movies = action.payload.results.slice(0, 10);
                 state.totalPages = action.payload.total_pages;
             })
             .addCase(getPopularMovies.rejected, (state) => {

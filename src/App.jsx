@@ -19,20 +19,28 @@ function App() {
     <BrowserRouter>
       <ErrorBoundary>
         <Suspense fallback={<div className="flex justify-center items-center text-3xl text-white bg-gray-900 h-screen">Loading...</div>}>
-          {!user && mode === "login" &&
-            <LoginModal openSignup={() => setMode("signup")} />
-          }
+          {!user ? (
+            mode === "login"
+              ? <LoginModal openSignup={() => setMode("signup")} />
+              : <SignupModal openLogin={() => setMode("login")} />
+          ) : (
 
-          {!user && mode === "signup" &&
-            <SignupModal openLogin={() => setMode("login")} />
-          }
-          <Routes>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="/movie/:id" element={<MovieDetails />} />
+                <Route path="/favorites" element={<Favorites />} />
+              </Route>
+            </Routes>
+
+          )}
+          {/* <Routes>
             <Route path="/" element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/movie/:id" element={<MovieDetails />} />
               <Route path="/favorites" element={<Favorites />} />
             </Route>
-          </Routes>
+          </Routes> */}
         </Suspense>
       </ErrorBoundary>
       <ToastContainer position="top-right" autoClose={2000} theme="light" transition={Flip} />
