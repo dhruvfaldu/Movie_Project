@@ -4,6 +4,7 @@ import { loginUser } from "../store/movies/authSlice";
 import { toast } from "react-toastify";
 import login from "../assets/Login.jpg";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { BiSolidCameraMovie } from "react-icons/bi";
 
 function LoginModal({ openSignup }) {
   const dispatch = useDispatch();
@@ -46,16 +47,18 @@ function LoginModal({ openSignup }) {
     }
   };
 
-  const handleLogin = () => {
-    toast.success(`${storedUser.name} Logged in successfully!`);
-  }
-
   return (
     <>
       <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${login})` }}>
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-80 shadow-lg">
-            <h3 className="text-white text-2xl mb-2 text-center">Welcome To Movieapp</h3>
+             <div className="flex flex-col items-center justify-center gap-2 text-white text-xl mb-2 text-center">
+              <span className="bg-red-500 px-2 py-2 rounded-full">
+                <BiSolidCameraMovie />
+              </span>
+              <p>Welcome To Movieapp</p>
+            </div>
+
             <h2 className="text-white text-xl mb-5 text-center ">Login</h2>
             <label className="text-gray-300 text-sm">Email</label>
             <input
@@ -92,7 +95,7 @@ function LoginModal({ openSignup }) {
               <p className="text-red-500 text-xs mb-3">{errors.password}</p>
             )}
 
-            <button onClick={handleLogin} className="w-full bg-red-600 hover:bg-red-700 transition text-white py-2 rounded mt-2">
+            <button className="w-full bg-red-600 hover:bg-red-700 transition text-white py-2 rounded mt-2">
               Login
             </button>
 

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const savedUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -11,6 +12,7 @@ const authSlice = createSlice({
     loginUser: (state, action) => {
       state.user = action.payload;
       localStorage.setItem("currentUser", JSON.stringify(action.payload));
+      toast.success(`${action.payload.name} logged in successfully`);
     },
 
     logoutUser: (state) => {
