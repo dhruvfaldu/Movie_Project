@@ -11,8 +11,8 @@ function SignupModal({ openLogin }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({ password: false, confirmPassword: false });
+  // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,20 +81,19 @@ function SignupModal({ openLogin }) {
           <label className="text-gray-300 text-sm">Password</label>
           <div className="relative">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword.password ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password..."
               className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
     ${errors.password ? "border-red-500" : "border-gray-600"}`}
             />
-
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowPassword({password: !showPassword.password})}
               className="absolute right-3 top-4 text-gray-400"
             >
-              {showPassword ? <FiEyeOff /> : <FiEye />}
+              {showPassword.password ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
           {errors.password && (
@@ -104,7 +103,7 @@ function SignupModal({ openLogin }) {
           <label className="text-gray-300 text-sm">Confirm Password</label>
           <div className="relative">
             <input
-              type={showConfirmPassword ? "text" : "password"}
+              type={showPassword.confirmPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm your password..."
@@ -113,10 +112,10 @@ function SignupModal({ openLogin }) {
             />
             <button
               type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-4 text-gray-400"
+              onClick={() => setShowPassword({confirmPassword: !showPassword.confirmPassword})}
+              className="absolute right-3 top-4 text-gray-400 cursor-pointer"
             >
-              {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+              {showPassword.confirmPassword ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
           {errors.confirmPassword && (
