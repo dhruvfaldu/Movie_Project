@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import login from "../assets/login.jpg";
+import login from "../assets/Login.jpg";
 
 function SignupModal({ openLogin }) {
 
