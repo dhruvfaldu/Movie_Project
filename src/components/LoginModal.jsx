@@ -56,7 +56,7 @@ function LoginModal({ openSignup }) {
             <h2 className="text-white text-xl mb-5 text-center ">Login</h2>
             <label className="text-gray-300 text-sm">Email</label>
             <input
-              type="text"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
