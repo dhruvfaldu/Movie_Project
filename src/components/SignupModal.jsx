@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import login from "../assets/Login.jpg";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function SignupModal({ openLogin }) {
 
@@ -8,8 +9,10 @@ function SignupModal({ openLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [errors, setErrors] = useState({});
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,6 +57,7 @@ function SignupModal({ openLogin }) {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name..."
             className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
           ${errors.name ? "border-red-500" : "border-gray-600"}`}
           />
@@ -66,6 +70,7 @@ function SignupModal({ openLogin }) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email..."
             className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
           ${errors.email ? "border-red-500" : "border-gray-600"}`}
           />
@@ -74,25 +79,46 @@ function SignupModal({ openLogin }) {
           )}
 
           <label className="text-gray-300 text-sm">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
-          ${errors.password ? "border-red-500" : "border-gray-600"}`}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password..."
+              className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
+    ${errors.password ? "border-red-500" : "border-gray-600"}`}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-4 text-gray-400"
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
           {errors.password && (
             <p className="text-red-500 text-xs mb-3">{errors.password}</p>
           )}
 
           <label className="text-gray-300 text-sm">Confirm Password</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
-          ${errors.confirmPassword ? "border-red-500" : "border-gray-600"}`}
-          />
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm your password..."
+              className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
+    ${errors.confirmPassword ? "border-red-500" : "border-gray-600"}`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-4 text-gray-400"
+            >
+              {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
           {errors.confirmPassword && (
             <p className="text-red-500 text-xs mb-3">{errors.confirmPassword}</p>
           )}
@@ -118,3 +144,5 @@ function SignupModal({ openLogin }) {
 }
 
 export default SignupModal;
+
+//mare ama password ma eye button add karvu chhe ke user eye button click kare to password show karvu chhe real form type comform password ma show karvu chhe ma bhi

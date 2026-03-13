@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../store/movies/authSlice";
 import { toast } from "react-toastify";
 import login from "../assets/Login.jpg";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function LoginModal({ openSignup }) {
   const dispatch = useDispatch();
@@ -10,6 +11,8 @@ function LoginModal({ openSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const storedUser = JSON.parse(localStorage.getItem("user"));
 
@@ -59,6 +62,7 @@ function LoginModal({ openSignup }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email..."
               className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
           ${errors.email ? "border-red-500" : "border-gray-600"}`}
             />
@@ -67,13 +71,23 @@ function LoginModal({ openSignup }) {
             )}
 
             <label className="text-gray-300 text-sm">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
-          ${errors.password ? "border-red-500" : "border-gray-600"}`}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password..."
+                className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
+    ${errors.password ? "border-red-500" : "border-gray-600"}`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-4 text-gray-400"
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-xs mb-3">{errors.password}</p>
             )}
