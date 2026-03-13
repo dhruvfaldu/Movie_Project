@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../store/movies/authSlice";
 import { toast } from "react-toastify";
-import login from "../assets/login.jpg";
+import login from "../assets/Login.jpg";
 
 function LoginModal({ openSignup }) {
   const dispatch = useDispatch();
