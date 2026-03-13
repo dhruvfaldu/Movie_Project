@@ -12,7 +12,6 @@ function SignupModal({ openLogin }) {
   const [errors, setErrors] = useState({});
 
   const [showPassword, setShowPassword] = useState({ password: false, confirmPassword: false });
-  // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
