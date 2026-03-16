@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 import login from "../assets/Login.jpg";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { BiSolidCameraMovie } from "react-icons/bi";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginModal({ openSignup }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +31,7 @@ function LoginModal({ openSignup }) {
     if (field === "password") {
       if (!value.trim()) {
         error = "Password is required";
-      }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)){
+      } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)) {
         error = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
       }
     }
@@ -43,6 +45,12 @@ function LoginModal({ openSignup }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    setTouched({
+      email: true,
+      password: true,
+    });
+    
     let newErrors = {};
 
     if (!email.trim()) {
@@ -66,6 +74,7 @@ function LoginModal({ openSignup }) {
     }
     if (storedUser.email === email && storedUser.password === password) {
       dispatch(loginUser(storedUser));
+      navigate("/");
     } else {
       setErrors({ password: "Invalid email or password" });
     }
@@ -91,7 +100,7 @@ function LoginModal({ openSignup }) {
               onChange={(e) => {
                 setEmail(e.target.value);
                 validateField("email", e.target.value);
-                }}
+              }}
               onBlur={(e) => setTouched({ ...touched, email: true })}
               placeholder="Enter your email..."
               className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
@@ -106,9 +115,10 @@ function LoginModal({ openSignup }) {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) =>{
+                onChange={(e) => {
                   setPassword(e.target.value);
-                  validateField("password", e.target.value);}}
+                  validateField("password", e.target.value);
+                }}
                 onBlur={(e) => setTouched({ ...touched, password: true })}
                 placeholder="Enter your password..."
                 className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
@@ -126,22 +136,25 @@ function LoginModal({ openSignup }) {
               <p className="text-red-500 text-xs mb-3">{errors.password}</p>
             )}
 
+            {/* <Link to="/" className="text-gray-400 text-sm mt-4 text-center"> */}
             <button className="w-full bg-red-600 hover:bg-red-700 transition text-white py-2 rounded mt-2">
               Login
             </button>
+            {/* </Link> */}
 
             <p className="text-gray-400 text-sm mt-4 text-center">
               Don't have an account?
-              <span
-                onClick={openSignup}
-                className="text-red-500 ml-1 cursor-pointer hover:underline"
-              >
-                Signup
-              </span>
+              <Link to="/signup" className="text-red-500 hover:text-red-600 transition">
+                <span
+                  onClick={openSignup}
+                  className="text-red-500 ml-1 cursor-pointer hover:underline"
+                >
+                  Signup
+                </span>
+              </Link>
             </p>
 
           </form>
-
         </div>
       </div>
     </>

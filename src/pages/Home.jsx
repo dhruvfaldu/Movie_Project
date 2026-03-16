@@ -8,7 +8,7 @@ import TrendingCarousel from "../components/TrendingCarousel";
 const Home = () => {
     const dispatch = useDispatch();
 
-    const { movies, page, totalPages, loading, rating, genres, selectedGenre, query, } = useSelector((state) => state.movies);
+    const { movies, page, totalPages, loading, rating, genres, selectedGenre, query } = useSelector((state) => state.movies);
     useEffect(() => {
         if (query && query.length > 2) {
             dispatch(searchMovie({ query, page }));

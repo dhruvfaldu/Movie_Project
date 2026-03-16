@@ -8,6 +8,7 @@ const TrendingCarousel = () => {
 
   const { trending } = useSelector((state) => state.movies);
 
+
   return (
     <Swiper
       spaceBetween={20}

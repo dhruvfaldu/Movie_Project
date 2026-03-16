@@ -35,6 +35,8 @@ export const getTrendingMovies = createAsyncThunk(
     "movies/getTrendingMovies",
     async () => {
         const data = await fetchTrendingMovies();
+        console.log(data);
+        
         return data;
     }
 );

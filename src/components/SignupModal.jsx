@@ -1,8 +1,10 @@
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import login from "../assets/Login.jpg";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { BiSolidCameraMovie } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 function SignupModal({ openLogin }) {
 
@@ -39,8 +41,11 @@ function SignupModal({ openLogin }) {
     }
 
     if (field === "password") {
-      if (value.length < 6) {
-        error = "Password must be at least 6 characters";
+
+      if (value.length < 8) {
+        error = "Password must be at least 8 characters";
+      }else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(value)) {
+        error = "Password must contain uppercase, lowercase, number and special character";
       }
 
       if (confirmPassword && value !== confirmPassword) {
@@ -56,11 +61,13 @@ function SignupModal({ openLogin }) {
       }
     }
 
-    // if (field === "confirmPassword") {
-    //   if (value !== password) {
-    //     error = "Passwords do not match";
-    //   }
-    // }
+    if (field === "confirmPassword") {
+      if (!value) {
+        error = "Confirm password is required";
+      }else if (value !== password) {
+        error = "Passwords do not match";
+      }
+    }
 
     setErrors(prev => ({
       ...prev,
@@ -70,30 +77,41 @@ function SignupModal({ openLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let newErrors = {};
 
-    if (!name.trim()) newErrors.name = "Name is required";
+    setTouched({
+      name: true,
+      email: true,
+      password: true,
+      confirmPassword: true
+    });
+
+    let newErrors = {};
+    if (!name.trim()) {
+      newErrors.name = "Name is required";
+    }
 
     if (!email.trim()) {
       newErrors.email = "Email is required";
-    }
-    else if (!/\S+@\S+\.\S+/.test(email) && !email.toUpperCase()) {
+    }else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Invalid email format";
     }
 
-    if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)){
-      newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
+    if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)) {
+      newErrors.password =
+        "Password must contain uppercase, lowercase, number and special character";
     }
 
-    if (password !== confirmPassword) {
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Confirm password is required";
+    }else if (password !== confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;  
+    if (Object.keys(newErrors).length > 0) return;
     const user = { name, email, password };
     localStorage.setItem("user", JSON.stringify(user));
     toast.success(`${user.name} created successfully`);
@@ -101,9 +119,15 @@ function SignupModal({ openLogin }) {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${login})` }}>
+    <div
+      className="min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${login})` }}
+    >
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-80 shadow-lg">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gray-800 p-6 rounded-lg w-80 shadow-lg"
+        >
           <div className="flex flex-col items-center gap-2 text-white text-xl mb-3">
             <span className="bg-red-500 px-2 py-2 rounded-full">
               <BiSolidCameraMovie />
@@ -159,6 +183,7 @@ function SignupModal({ openLogin }) {
               className={`w-full p-2 pr-10 mt-1 mb-1 rounded bg-gray-700 text-white border
               ${errors.password && touched.password ? "border-red-500" : "border-gray-600"}`}
             />
+
             <button
               type="button"
               onClick={() =>
@@ -172,6 +197,7 @@ function SignupModal({ openLogin }) {
               {showPassword.password ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
+
           {errors.password && touched.password && (
             <p className="text-red-500 text-xs mb-3">{errors.password}</p>
           )}
@@ -186,9 +212,13 @@ function SignupModal({ openLogin }) {
                 setConfirmPassword(e.target.value);
                 validateField("confirmPassword", e.target.value);
               }}
-              onBlur={() => setTouched(prev => ({ ...prev, confirmPassword: true }))}
+              onBlur={() =>
+                setTouched(prev => ({ ...prev, confirmPassword: true }))
+              }
               className={`w-full p-2 pr-10 mt-1 mb-1 rounded bg-gray-700 text-white border
-              ${errors.confirmPassword && touched.confirmPassword ? "border-red-500" : "border-gray-600"}`}
+              ${errors.confirmPassword && touched.confirmPassword
+                  ? "border-red-500"
+                  : "border-gray-600"}`}
             />
 
             <button
@@ -204,8 +234,11 @@ function SignupModal({ openLogin }) {
               {showPassword.confirmPassword ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
+
           {errors.confirmPassword && touched.confirmPassword && (
-            <p className="text-red-500 text-xs mb-3">{errors.confirmPassword}</p>
+            <p className="text-red-500 text-xs mb-3">
+              {errors.confirmPassword}
+            </p>
           )}
 
           <button className="w-full bg-red-600 hover:bg-red-700 transition text-white py-2 rounded mt-2">
@@ -214,13 +247,16 @@ function SignupModal({ openLogin }) {
 
           <p className="text-gray-400 text-sm mt-4 text-center">
             Already have account?
-            <span
-              onClick={openLogin}
-              className="text-red-500 ml-1 cursor-pointer hover:underline"
-            >
-              Login
-            </span>
+            <Link to="/login">
+              <span
+                onClick={openLogin}
+                className="text-red-500 ml-1 cursor-pointer hover:underline"
+              >
+                Login
+              </span>
+            </Link>
           </p>
+
         </form>
       </div>
     </div>
@@ -228,3 +264,4 @@ function SignupModal({ openLogin }) {
 }
 
 export default SignupModal;
+
