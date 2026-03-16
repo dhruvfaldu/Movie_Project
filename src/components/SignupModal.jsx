@@ -56,11 +56,11 @@ function SignupModal({ openLogin }) {
       }
     }
 
-    if (field === "confirmPassword") {
-      if (value !== password) {
-        error = "Passwords do not match";
-      }
-    }
+    // if (field === "confirmPassword") {
+    //   if (value !== password) {
+    //     error = "Passwords do not match";
+    //   }
+    // }
 
     setErrors(prev => ({
       ...prev,
@@ -77,12 +77,14 @@ function SignupModal({ openLogin }) {
     if (!email.trim()) {
       newErrors.email = "Email is required";
     }
-    else if (!/\S+@\S+\.\S+/.test(email)) {
+    else if (!/\S+@\S+\.\S+/.test(email) && !email.toUpperCase()) {
       newErrors.email = "Invalid email format";
     }
 
     if (password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
+    }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)){
+      newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
     }
 
     if (password !== confirmPassword) {
@@ -91,7 +93,7 @@ function SignupModal({ openLogin }) {
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length > 0) return;  
     const user = { name, email, password };
     localStorage.setItem("user", JSON.stringify(user));
     toast.success(`${user.name} created successfully`);

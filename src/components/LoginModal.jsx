@@ -12,10 +12,34 @@ function LoginModal({ openSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
   const [showPassword, setShowPassword] = useState(false);
+  const validateField = (field, value) => {
+    let error = "";
 
-  const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (field === "email") {
+      if (!value.trim()) {
+        error = "Email is required";
+      } else if (!/\S+@\S+\.\S+/.test(value)) {
+        error = "Invalid email format. @ must be required";
+      }
+
+    }
+    if (field === "password") {
+      if (!value.trim()) {
+        error = "Password is required";
+      }else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)){
+        error = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
+      }
+    }
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]: error,
+    }));
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,7 +76,7 @@ function LoginModal({ openSignup }) {
       <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${login})` }}>
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-80 shadow-lg">
-             <div className="flex flex-col items-center justify-center gap-2 text-white text-xl mb-2 text-center">
+            <div className="flex flex-col items-center justify-center gap-2 text-white text-xl mb-2 text-center">
               <span className="bg-red-500 px-2 py-2 rounded-full">
                 <BiSolidCameraMovie />
               </span>
@@ -64,12 +88,16 @@ function LoginModal({ openSignup }) {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateField("email", e.target.value);
+                }}
+              onBlur={(e) => setTouched({ ...touched, email: true })}
               placeholder="Enter your email..."
               className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
           ${errors.email ? "border-red-500" : "border-gray-600"}`}
             />
-            {errors.email && (
+            {errors.email && touched.email && (
               <p className="text-red-500 text-xs mb-3">{errors.email}</p>
             )}
 
@@ -78,7 +106,10 @@ function LoginModal({ openSignup }) {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) =>{
+                  setPassword(e.target.value);
+                  validateField("password", e.target.value);}}
+                onBlur={(e) => setTouched({ ...touched, password: true })}
                 placeholder="Enter your password..."
                 className={`w-full p-2 mt-1 mb-1 rounded bg-gray-700 text-white border
     ${errors.password ? "border-red-500" : "border-gray-600"}`}
@@ -91,7 +122,7 @@ function LoginModal({ openSignup }) {
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
-            {errors.password && (
+            {errors.password && touched.password && (
               <p className="text-red-500 text-xs mb-3">{errors.password}</p>
             )}
 
