@@ -137,7 +137,7 @@ function LoginModal({ openSignup }) {
             )}
 
             {/* <Link to="/" className="text-gray-400 text-sm mt-4 text-center"> */}
-            <button className="w-full bg-red-600 hover:bg-red-700 transition text-white py-2 rounded mt-2">
+            <button className="w-full bg-red-600 hover:bg-red-700 transition text-white py-2 rounded mt-2 cursor-pointer">
               Login
             </button>
             {/* </Link> */}
@@ -147,7 +147,7 @@ function LoginModal({ openSignup }) {
               <Link to="/signup" className="text-red-500 hover:text-red-600 transition">
                 <span
                   onClick={openSignup}
-                  className="text-red-500 ml-1 cursor-pointer hover:underline"
+                  className="text-red-500 ml-1 cursor-pointer hover:underline "
                 >
                   Signup
                 </span>
