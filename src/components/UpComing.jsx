@@ -4,9 +4,9 @@ import { Autoplay } from "swiper/modules";
 import { useSelector } from "react-redux";
 import MovieCard from "./MovieCard";
 
-const TrendingCarousel = () => {
+const UpComing = () => {
 
-  const { trending } = useSelector((state) => state.movies);
+  const { upComing } = useSelector((state) => state.movies);
 
   return (
     <Swiper
@@ -32,7 +32,7 @@ const TrendingCarousel = () => {
         },
       }}
     >
-      {trending.map((movie) => (
+      {upComing.map((movie) => (
         <SwiperSlide key={movie.id}>
           <MovieCard
             id={movie.id}
@@ -46,4 +46,4 @@ const TrendingCarousel = () => {
   );
 };
 
-export default TrendingCarousel;
+export default UpComing;

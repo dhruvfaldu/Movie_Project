@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
+    upComingMovies,
     fetchPopularMovies,
     searchMovies,
     fetchMoviesByGenre,
@@ -31,12 +32,19 @@ export const getMoviesByGenre = createAsyncThunk(
     }
 );
 
+export const getUpcomingMovies = createAsyncThunk(
+    "movies/getUpcomingMovies",
+    async () => {
+        const data = await upComingMovies();
+        console.log(data);
+        return data;
+    }
+)
+
 export const getTrendingMovies = createAsyncThunk(
     "movies/getTrendingMovies",
     async () => {
         const data = await fetchTrendingMovies();
-        console.log(data);
-        
         return data;
     }
 );
@@ -52,6 +60,7 @@ export const getPopularMovies = createAsyncThunk(
 const movieSlice = createSlice({
     name: "movies",
     initialState: {
+        upComing: [],
         trending: [],
         movies: [],
         page: 1,
@@ -113,6 +122,19 @@ const movieSlice = createSlice({
     },
 
     extraReducers: (builder) => {
+        builder
+        .addCase(getUpcomingMovies.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(getUpcomingMovies.fulfilled, (state, action) => {
+            state.loading = false;
+            state.upComing = action.payload.results;
+        })
+        .addCase(getUpcomingMovies.rejected, (state) => {
+            state.loading = false;
+            state.error = "Failed to fetch movies";
+        })
+
         builder
             .addCase(getTrendingMovies.pending, (state) => {
                 state.loading = true;

@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTrendingMovies, getPopularMovies, setPage, getGenres, getMoviesByGenre, setGenre, searchMovie } from "../store/movies/movieSlice";
+import { getUpcomingMovies, getTrendingMovies, getPopularMovies, setPage, getGenres, getMoviesByGenre, setGenre, searchMovie } from "../store/movies/movieSlice";
 import MovieCard from "../components/MovieCard";
 import HeroBanner from "../components/HeroBanner";
 import TrendingCarousel from "../components/TrendingCarousel";
+import UpComing from "../components/UpComing";
 
 const Home = () => {
     const dispatch = useDispatch();
 
-    const { movies, page, totalPages, loading, rating, genres, selectedGenre, query } = useSelector((state) => state.movies);
+    const { movies, upComing, page, totalPages, loading, rating, genres, selectedGenre, query } = useSelector((state) => state.movies);
     useEffect(() => {
         if (query && query.length > 2) {
             dispatch(searchMovie({ query, page }));
@@ -27,6 +28,7 @@ const Home = () => {
 
     useEffect(() => {
         dispatch(getTrendingMovies());
+        dispatch(getUpcomingMovies());
     }, []);
 
     let filteredMovies = [...movies];
@@ -92,6 +94,28 @@ const Home = () => {
                         </button>
                     ))}
             </div>
+
+            <h2 className="text-2xl font-bold mb-5 mt-5">
+                Upcoming Movies
+            </h2>
+            {loading ? (
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                    {[...Array(5)].map((_, i) => (
+                        <div key={i} className="animate-pulse">
+                            <div className="bg-gray-600 h-75 rounded-lg mb-2"></div>
+                            <div className="bg-gray-600 h-4 w-3/4 rounded mb-2"></div>
+                            <div className="bg-gray-600 h-4 w-1/2 rounded"></div>
+                        </div>))}
+                </div>
+            ) : (
+                <>
+                    <div>
+                        <div className="flex items-center mt-5">
+                            <UpComing movies={movies} />
+                        </div>
+                    </div>
+                </>
+            )}
 
             <h2 className="text-2xl font-bold mb-5 mt-5">
                 Trending Movies
